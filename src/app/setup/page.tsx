@@ -2,24 +2,28 @@ import Link from "next/link";
 
 const steps = [
   {
-    title: "1. 把电视剧资源放进 /Volumes/2T/zhuyu",
-    body: "当前规则支持根目录直接平铺 MP4 文件，例如 30.MP4 到 40.MP4，不需要额外子文件夹。",
+    title: "1. 本地视频先放在 /Volumes/2T/zhuyu",
+    body: "上传脚本会从这块 2T 磁盘读取 MP4 文件，并按当前文件名上传到 Cloudflare R2。",
   },
   {
-    title: "2. 本地开发先用 local 模式",
-    body: "复制 .env.example 为 .env.local，并把 LOCAL_VIDEO_ROOT 保持为 /Volumes/2T/zhuyu。这样网站会直接读取这块 2T 磁盘里的视频资源。",
+    title: "2. 在 .env.local 中填好 R2 凭证",
+    body: "把 STORAGE_SOURCE 设为 r2，并填写 R2_ACCOUNT_ID、R2_ACCESS_KEY_ID、R2_SECRET_ACCESS_KEY、R2_BUCKET。当前 bucket 名称是 zhuyu-video。",
   },
   {
-    title: "3. 本地网页服务启动后直接播放",
-    body: "运行 npm run dev 后，网页里的每个视频卡片会直接走 /api/local-video/... 接口，不再依赖 Jellyfin。",
+    title: "3. 运行 npm run r2:upload 上传视频",
+    body: "脚本会使用 R2 的 S3 兼容接口分片上传大视频文件，适合当前 1GB 以上的 MP4 资源。",
   },
   {
-    title: "4. 临时公网访问走网页 Quick Tunnel",
-    body: "如果你想临时从公网访问这套站点，直接运行 npm run tunnel:quick:web，让 cloudflared 把本地 Next.js 服务暴露成一个 trycloudflare.com 地址。",
+    title: "4. 启动站点后直接从 R2 播放",
+    body: "运行 npm run dev 后，页面会通过 /api/r2-video/... 读取 Cloudflare R2 中的对象，不再依赖本地磁盘或临时隧道。",
   },
   {
-    title: "5. Vercel 只适合作为前端演示",
-    body: "Vercel 无法直接读取你本机 /Volumes/2T/zhuyu 里的视频文件，所以真正的视频播放链路仍然应该跑在本地网页服务上。",
+    title: "5. Vercel 线上部署也走同一套 R2 配置",
+    body: "把同样的 R2 环境变量同步到 Vercel 后，线上页面也能从同一个 bucket 中读取视频内容。",
+  },
+  {
+    title: "6. 后续可再绑定自定义域名或公有访问",
+    body: "当前项目先通过服务端 R2 代理读取对象，后面如果需要更轻的静态分发，再决定是否为 bucket 增加公共域名。",
   },
 ];
 
@@ -31,12 +35,14 @@ export default function SetupPage() {
           Back to library
         </Link>
         <h1 className="mt-5 text-4xl font-semibold text-foreground">
-          本地直出方案说明
+          Cloudflare R2 方案说明
         </h1>
         <p className="mt-4 max-w-3xl text-sm leading-7 text-muted">
-          当前仓库会直接读取本地
+          当前仓库会把本地
           <code className="font-mono"> /Volumes/2T/zhuyu </code>
-          目录，并通过 <code className="font-mono">/api/local-video</code> 提供视频流。这样链路更短，适合先验证网页直出是否比 Jellyfin 更快。
+          中的视频先上传到 Cloudflare R2，再通过
+          <code className="font-mono"> /api/r2-video </code>
+          提供统一的视频流入口。
         </p>
       </section>
 
@@ -66,6 +72,12 @@ export default function SetupPage() {
           <h2 className="text-xl font-semibold text-foreground">环境变量</h2>
           <pre className="mt-4 overflow-x-auto rounded-2xl bg-[#111111] p-4 font-mono text-sm text-white">
 {`LOCAL_VIDEO_ROOT=/Volumes/2T/zhuyu
+STORAGE_SOURCE=r2
+R2_ACCOUNT_ID=
+R2_ACCESS_KEY_ID=
+R2_SECRET_ACCESS_KEY=
+R2_BUCKET=zhuyu-video
+R2_PREFIX=
 `}
           </pre>
         </article>

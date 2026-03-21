@@ -1,4 +1,4 @@
-export type ContentSource = "local";
+export type ContentSource = "r2";
 
 export type Episode = {
   id: string;
