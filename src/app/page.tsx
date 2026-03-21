@@ -12,8 +12,8 @@ export default async function Home() {
         <div className="panel rounded-[2rem] p-8 text-sm leading-7 text-muted">
           当前还没有检测到电视剧资源。先确认本地目录
           <code className="font-mono"> /Volumes/2T/zhuyu </code>
-          中已经有剧集文件夹，例如
-          <code className="font-mono"> /Volumes/2T/zhuyu/三体/S01E01.mp4</code>
+          中已经有视频文件，例如
+          <code className="font-mono"> /Volumes/2T/zhuyu/30.MP4</code>
           ，刷新后这里就会显示。
         </div>
       ) : (

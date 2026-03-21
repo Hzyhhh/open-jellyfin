@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { episodeMetadata } from "@/lib/episode-metadata";
 import { Episode, Series } from "@/lib/types";
 import { extractEpisodeNumbers, humanFileTitle, slugify } from "@/lib/utils";
 
@@ -12,6 +13,22 @@ async function readSeriesDirectories() {
   try {
     const entries = await fs.readdir(VIDEO_ROOT, { withFileTypes: true });
     return entries.filter((entry) => entry.isDirectory());
+  } catch {
+    return [];
+  }
+}
+
+async function readRootVideoFiles() {
+  try {
+    const entries = await fs.readdir(VIDEO_ROOT, { withFileTypes: true });
+    return entries.filter((entry) => {
+      if (!entry.isFile()) {
+        return false;
+      }
+
+      const extension = path.extname(entry.name).toLowerCase();
+      return VIDEO_EXTENSIONS.has(extension);
+    });
   } catch {
     return [];
   }
@@ -32,7 +49,9 @@ async function readEpisodesFromSeries(seriesDirName: string): Promise<Episode[]>
   const seriesSlug = slugify(seriesDirName);
 
   const episodes = files.map((file) => {
-    const title = humanFileTitle(file.name);
+    const fileKey = path.parse(file.name).name;
+    const metadata = episodeMetadata[fileKey];
+    const title = metadata?.title ?? humanFileTitle(file.name);
     const { seasonNumber, episodeNumber } = extractEpisodeNumbers(title);
     const relativePath = `${seriesDirName}/${file.name}`;
 
@@ -43,6 +62,7 @@ async function readEpisodesFromSeries(seriesDirName: string): Promise<Episode[]>
       seriesSlug,
       seriesTitle: seriesDirName,
       source: "local" as const,
+      description: metadata?.description,
       seasonNumber,
       episodeNumber,
       streamUrl: `/api/local-video/${relativePath.split("/").map(encodeURIComponent).join("/")}`,
@@ -64,6 +84,7 @@ async function readEpisodesFromSeries(seriesDirName: string): Promise<Episode[]>
 
 export async function getLocalSeriesList(): Promise<Series[]> {
   const directories = await readSeriesDirectories();
+  const rootFiles = await readRootVideoFiles();
   const seriesList = await Promise.all(
     directories.map(async (directory) => {
       const episodes = await readEpisodesFromSeries(directory.name);
@@ -81,9 +102,61 @@ export async function getLocalSeriesList(): Promise<Series[]> {
     }),
   );
 
-  return seriesList.sort((left, right) =>
-    left.title.localeCompare(right.title, "zh-Hans-CN"),
-  );
+  if (rootFiles.length > 0) {
+    const rootSeriesSlug = "all";
+    const rootEpisodes = rootFiles.map((file) => {
+      const fileKey = path.parse(file.name).name;
+      const metadata = episodeMetadata[fileKey];
+      const title = metadata?.title ?? humanFileTitle(file.name);
+      const { seasonNumber, episodeNumber } = extractEpisodeNumbers(title);
+
+      return {
+        id: file.name,
+        slug: slugify(file.name),
+        title,
+        seriesSlug: rootSeriesSlug,
+        seriesTitle: "全部剧集",
+        source: "local" as const,
+        description: metadata?.description,
+        seasonNumber,
+        episodeNumber,
+        streamUrl: `/api/local-video/${encodeURIComponent(file.name)}`,
+        rawPath: file.name,
+      };
+    }).sort((left, right) => {
+      const leftEpisode = left.episodeNumber ?? Number.MAX_SAFE_INTEGER;
+      const rightEpisode = right.episodeNumber ?? Number.MAX_SAFE_INTEGER;
+
+      if (leftEpisode !== rightEpisode) {
+        return leftEpisode - rightEpisode;
+      }
+
+      return left.title.localeCompare(right.title, "zh-Hans-CN");
+    });
+
+    seriesList.unshift({
+      id: "__root__",
+      slug: rootSeriesSlug,
+      title: "全部剧集",
+      source: "local" as const,
+      description: "当前目录中的 MP4 文件会直接按剧集列表展示，不需要额外子文件夹。",
+      episodeCount: rootEpisodes.length,
+      coverText: "全部",
+      episodes: rootEpisodes,
+    });
+  }
+
+  return seriesList.sort((left, right) => {
+    if (left.id === "__root__") {
+      return -1;
+    }
+
+    if (right.id === "__root__") {
+      return 1;
+    }
+
+    return left.title.localeCompare(right.title, "zh-Hans-CN");
+  });
 }
 
 export async function getLocalSeriesBySlug(slug: string) {

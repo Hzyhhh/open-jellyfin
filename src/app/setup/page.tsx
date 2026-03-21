@@ -3,7 +3,7 @@ import Link from "next/link";
 const steps = [
   {
     title: "1. 把电视剧资源放进 /Volumes/2T/zhuyu",
-    body: "每个一级文件夹代表一部剧，文件名建议带上 S01E01 或 第01集，这样前端能更稳定地解析顺序。",
+    body: "当前规则支持根目录直接平铺 MP4 文件，例如 30.MP4 到 40.MP4，不需要额外子文件夹。",
   },
   {
     title: "2. 本地开发先用 local 模式",
@@ -54,12 +54,11 @@ export default function SetupPage() {
           <h2 className="text-xl font-semibold text-foreground">资源目录约定</h2>
           <pre className="mt-4 overflow-x-auto rounded-2xl bg-[#111111] p-4 font-mono text-sm text-white">
 {`/Volumes/2T/zhuyu/
-  三体/
-    S01E01.mp4
-    S01E02.mp4
-  繁花/
-    第01集.mp4
-    第02集.mp4`}
+  30.MP4
+  31.MP4
+  32.MP4
+  ...
+  40.MP4`}
           </pre>
         </article>
 

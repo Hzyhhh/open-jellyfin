@@ -5,7 +5,7 @@
 ## 当前已经实现
 
 - 本地视频目录默认读取 `/Volumes/2T/zhuyu`
-- 首页自动扫描电视剧目录
+- 首页自动扫描本地视频文件
 - 剧集详情页和网页内播放器
 - 本地视频流式播放接口
 
@@ -14,18 +14,18 @@
 1. 安装依赖
 2. 复制 `.env.example` 为 `.env.local`
 3. 确认 `LOCAL_VIDEO_ROOT=/Volumes/2T/zhuyu`
-4. 往 `/Volumes/2T/zhuyu` 目录里放电视剧资源
+4. 往 `/Volumes/2T/zhuyu` 目录里放视频资源
 5. 运行 `npm run dev`
 
 ## 本地视频目录格式
 
 ```text
 /Volumes/2T/zhuyu/
-  三体/
-    S01E01.mp4
-    S01E02.mp4
-  繁花/
-    第01集.mp4
+  30.MP4
+  31.MP4
+  32.MP4
+  ...
+  40.MP4
 ```
 
 ## Quick Tunnel 临时公网访问
