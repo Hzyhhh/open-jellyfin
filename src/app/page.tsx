@@ -1,6 +1,8 @@
 import { getSeriesList } from "@/lib/library";
 import { Episode, Series } from "@/lib/types";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const seriesList = await getSeriesList();
   const episodes = flattenEpisodes(seriesList);

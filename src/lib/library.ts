@@ -6,7 +6,12 @@ export async function getSeriesList() {
     return [];
   }
 
-  return getR2SeriesList();
+  try {
+    return getR2SeriesList();
+  } catch (error) {
+    console.error("Failed to load series list from R2.", error);
+    return [];
+  }
 }
 
 export async function getSeriesBySlug(slug: string) {
@@ -14,5 +19,10 @@ export async function getSeriesBySlug(slug: string) {
     return undefined;
   }
 
-  return getR2SeriesBySlug(slug);
+  try {
+    return getR2SeriesBySlug(slug);
+  } catch (error) {
+    console.error(`Failed to load series ${slug} from R2.`, error);
+    return undefined;
+  }
 }
