@@ -79,6 +79,8 @@ JELLYFIN_USER_ID=your_user_id
 npm run tunnel:quick:jellyfin
 ```
 
+这个命令默认走 `http2`。
+
 终端会输出一个随机地址，例如：
 
 ```text
