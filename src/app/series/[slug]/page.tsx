@@ -59,8 +59,7 @@ export default async function SeriesPage({
                 {episode.title}
               </h2>
               <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted">
-                {episode.description ??
-                  "点击后会进入网页播放器。等 Jellyfin 接管后，这里也会自动沿用 Jellyfin 的播放源。"}
+                {episode.description ?? "点击后会进入网页播放器。"}
               </p>
             </div>
             <div className="justify-self-start rounded-full border border-line px-4 py-2 text-sm text-foreground sm:justify-self-end">

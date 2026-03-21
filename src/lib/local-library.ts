@@ -3,7 +3,9 @@ import path from "node:path";
 import { Episode, Series } from "@/lib/types";
 import { extractEpisodeNumbers, humanFileTitle, slugify } from "@/lib/utils";
 
-const VIDEO_ROOT = path.join(process.cwd(), "videos");
+const VIDEO_ROOT = (
+  process.env.LOCAL_VIDEO_ROOT || "/Volumes/2T/zhuyu"
+).replace(/\/$/, "");
 const VIDEO_EXTENSIONS = new Set([".mp4", ".mkv", ".mov", ".m4v", ".webm"]);
 
 async function readSeriesDirectories() {
@@ -71,7 +73,7 @@ export async function getLocalSeriesList(): Promise<Series[]> {
         slug: slugify(directory.name),
         title: directory.name,
         source: "local" as const,
-        description: "当前直接从项目 videos 目录读取，适合开发联调和小规模私有播放。",
+        description: "当前直接从本地视频目录读取，适合开发联调和小规模私有播放。",
         episodeCount: episodes.length,
         coverText: directory.name.slice(0, 2).toUpperCase(),
         episodes,

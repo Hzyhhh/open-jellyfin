@@ -53,16 +53,16 @@ export function PlayerShell({
           </div>
           <p className="mt-6 max-w-3xl text-sm leading-7 text-muted">
             {episode.description ??
-              "这一版页面先保证电视剧资源能在网页内稳定播放。投屏阶段建议优先使用 Jellyfin 电视端客户端，网页负责选片和入口。"}
+              "这一版页面直接从本地视频目录读取资源，重点先保证网页内稳定播放和更短的传输链路。"}
           </p>
         </div>
 
         <aside className="panel rounded-[2rem] p-6">
-          <p className="text-sm uppercase tracking-[0.18em] text-muted">投屏建议</p>
+          <p className="text-sm uppercase tracking-[0.18em] text-muted">使用建议</p>
           <ul className="mt-4 space-y-4 text-sm leading-7 text-muted">
-            <li>电视能装 Jellyfin 客户端时，优先让电视直接连 Jellyfin。</li>
-            <li>手机接入同一个 Tailscale tailnet 后，可作为选片和遥控入口。</li>
-            <li>网页播放器适合电脑和平板直接观看，也适合作为前端门户。</li>
+            <li>优先先用网页链路验证首帧速度和拖动进度条的响应。</li>
+            <li>公网临时访问时，用 `npm run tunnel:quick:web` 暴露本地站点。</li>
+            <li>如果浏览器仍然卡顿，再继续检查视频编码和上行带宽。</li>
           </ul>
         </aside>
       </section>

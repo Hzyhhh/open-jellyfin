@@ -10,9 +10,11 @@ export default async function Home() {
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
       {episodes.length === 0 ? (
         <div className="panel rounded-[2rem] p-8 text-sm leading-7 text-muted">
-          当前还没有检测到电视剧资源。先在 <code className="font-mono">videos</code>{" "}
-          目录中新增一个剧集文件夹，例如
-          <code className="font-mono"> videos/三体/S01E01.mp4</code>，刷新后这里就会显示。
+          当前还没有检测到电视剧资源。先确认本地目录
+          <code className="font-mono"> /Volumes/2T/zhuyu </code>
+          中已经有剧集文件夹，例如
+          <code className="font-mono"> /Volumes/2T/zhuyu/三体/S01E01.mp4</code>
+          ，刷新后这里就会显示。
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">

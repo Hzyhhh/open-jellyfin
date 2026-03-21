@@ -2,24 +2,24 @@ import Link from "next/link";
 
 const steps = [
   {
-    title: "1. 把电视剧资源放进 videos 目录",
+    title: "1. 把电视剧资源放进 /Volumes/2T/zhuyu",
     body: "每个一级文件夹代表一部剧，文件名建议带上 S01E01 或 第01集，这样前端能更稳定地解析顺序。",
   },
   {
     title: "2. 本地开发先用 local 模式",
-    body: "复制 .env.example 为 .env.local，并把 NEXT_PUBLIC_CONTENT_SOURCE 保持为 local。这样网站会直接读取项目目录里的视频资源。",
+    body: "复制 .env.example 为 .env.local，并把 LOCAL_VIDEO_ROOT 保持为 /Volumes/2T/zhuyu。这样网站会直接读取这块 2T 磁盘里的视频资源。",
   },
   {
-    title: "3. Jellyfin 扫描同一个 videos 目录",
-    body: "后续安装 Jellyfin 时，把项目里的 videos 目录挂载进去，让 Jellyfin 和这个网站共用一套资源。",
+    title: "3. 本地网页服务启动后直接播放",
+    body: "运行 npm run dev 后，网页里的每个视频卡片会直接走 /api/local-video/... 接口，不再依赖 Jellyfin。",
   },
   {
-    title: "4. Tailscale 负责私有访问链路",
-    body: "让运行 Jellyfin 的设备和手机/平板/电视加入同一个 tailnet。网页和 Jellyfin 都不要直接暴露到公网。",
+    title: "4. 临时公网访问走网页 Quick Tunnel",
+    body: "如果你想临时从公网访问这套站点，直接运行 npm run tunnel:quick:web，让 cloudflared 把本地 Next.js 服务暴露成一个 trycloudflare.com 地址。",
   },
   {
-    title: "5. 切换到 jellyfin 模式",
-    body: "在 .env.local 里填上 JELLYFIN_BASE_URL、JELLYFIN_API_KEY、JELLYFIN_USER_ID，并把 NEXT_PUBLIC_CONTENT_SOURCE 改成 jellyfin。",
+    title: "5. Vercel 只适合作为前端演示",
+    body: "Vercel 无法直接读取你本机 /Volumes/2T/zhuyu 里的视频文件，所以真正的视频播放链路仍然应该跑在本地网页服务上。",
   },
 ];
 
@@ -31,13 +31,12 @@ export default function SetupPage() {
           Back to library
         </Link>
         <h1 className="mt-5 text-4xl font-semibold text-foreground">
-          Jellyfin + Tailscale 接入说明
+          本地直出方案说明
         </h1>
         <p className="mt-4 max-w-3xl text-sm leading-7 text-muted">
-          当前仓库已经具备两种资源模式：直接读取本地
-          <code className="font-mono"> videos </code>
-          目录，或者读取 Jellyfin 片库。推荐先用本地模式联调页面，再把同一个目录挂到
-          Jellyfin 上，并通过 Tailscale 做私有访问。
+          当前仓库会直接读取本地
+          <code className="font-mono"> /Volumes/2T/zhuyu </code>
+          目录，并通过 <code className="font-mono">/api/local-video</code> 提供视频流。这样链路更短，适合先验证网页直出是否比 Jellyfin 更快。
         </p>
       </section>
 
@@ -54,7 +53,7 @@ export default function SetupPage() {
         <article className="panel rounded-[1.5rem] p-5">
           <h2 className="text-xl font-semibold text-foreground">资源目录约定</h2>
           <pre className="mt-4 overflow-x-auto rounded-2xl bg-[#111111] p-4 font-mono text-sm text-white">
-{`videos/
+{`/Volumes/2T/zhuyu/
   三体/
     S01E01.mp4
     S01E02.mp4
@@ -67,10 +66,8 @@ export default function SetupPage() {
         <article className="panel rounded-[1.5rem] p-5">
           <h2 className="text-xl font-semibold text-foreground">环境变量</h2>
           <pre className="mt-4 overflow-x-auto rounded-2xl bg-[#111111] p-4 font-mono text-sm text-white">
-{`NEXT_PUBLIC_CONTENT_SOURCE=local
-JELLYFIN_BASE_URL=http://100.x.x.x:8096
-JELLYFIN_API_KEY=your_api_key
-JELLYFIN_USER_ID=your_user_id`}
+{`LOCAL_VIDEO_ROOT=/Volumes/2T/zhuyu
+`}
           </pre>
         </article>
       </section>

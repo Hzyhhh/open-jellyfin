@@ -1,19 +1,11 @@
 # 基础设施说明
 
-## 推荐路径
+当前项目已经切换为本地视频直出方案。
 
-如果你当前是在 macOS 开发，建议：
+核心链路：
 
-1. 本地直接安装 `Tailscale`
-2. 本地直接安装 `Jellyfin`，或者准备一台 Linux/NAS 作为服务器
-3. 让 Jellyfin 扫描本仓库下的 `videos` 目录
+1. 本地 Next.js 读取 `/Volumes/2T/zhuyu`
+2. 通过 `/api/local-video/...` 提供 Range 视频流
+3. 需要临时公网访问时，再用 `cloudflared` 暴露本地网页
 
-## Docker 示例
-
-仓库里提供了一个 `docker-compose.linux.yml`，适合 Linux 服务器参考。
-
-注意：
-
-- `network_mode: host` 更适合 Linux
-- macOS Docker Desktop 对 host networking 的行为不同，通常不建议照搬
-- 真正对外访问时，优先让设备走 Tailscale，不要把 Jellyfin 暴露到公网
+仓库里的 `docker-compose.linux.yml` 可以继续保留作历史参考，但不再是当前主链路。

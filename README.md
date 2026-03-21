@@ -1,54 +1,26 @@
 # Zhuyu Video
 
-一个基于 `Next.js + Jellyfin + Tailscale` 的私有视频站点原型。
+一个基于 `Next.js` 的本地视频直出站点原型。
 
 ## 当前已经实现
 
-- 项目内新增 `videos` 目录作为本地视频源
+- 本地视频目录默认读取 `/Volumes/2T/zhuyu`
 - 首页自动扫描电视剧目录
 - 剧集详情页和网页内播放器
-- `local` / `jellyfin` 两种内容源模式切换
 - 本地视频流式播放接口
-- Jellyfin 与 Tailscale 的接入约定
 
 ## 开发启动
 
 1. 安装依赖
 2. 复制 `.env.example` 为 `.env.local`
-3. 确认 `NEXT_PUBLIC_CONTENT_SOURCE=local`
-4. 往 `videos` 目录里放电视剧资源
+3. 确认 `LOCAL_VIDEO_ROOT=/Volumes/2T/zhuyu`
+4. 往 `/Volumes/2T/zhuyu` 目录里放电视剧资源
 5. 运行 `npm run dev`
 
-## 一键启动本地栈
-
-如果你重启过电脑，想一次性拉起 `Jellyfin`、`Tailscale userspace` 和前端开发服务器，直接运行：
-
-```bash
-npm run dev:stack
-```
-
-只启动 `Jellyfin + Tailscale`：
-
-```bash
-npm run services:start
-```
-
-查看 Tailscale 状态：
-
-```bash
-npm run tailscale:status
-```
-
-如果 Tailscale 提示未登录：
-
-```bash
-npm run tailscale:login
-```
-
-## videos 目录格式
+## 本地视频目录格式
 
 ```text
-videos/
+/Volumes/2T/zhuyu/
   三体/
     S01E01.mp4
     S01E02.mp4
@@ -56,27 +28,12 @@ videos/
     第01集.mp4
 ```
 
-## 切换到 Jellyfin
-
-当 Jellyfin 已经扫描同一个 `videos` 目录后：
-
-1. 生成 Jellyfin API Key
-2. 获取 Jellyfin 用户 ID
-3. 修改 `.env.local`
-
-```bash
-NEXT_PUBLIC_CONTENT_SOURCE=jellyfin
-JELLYFIN_BASE_URL=http://100.x.x.x:8096
-JELLYFIN_API_KEY=your_api_key
-JELLYFIN_USER_ID=your_user_id
-```
-
 ## Quick Tunnel 临时公网访问
 
-如果你不迁移 DNS，又想临时从公网访问本机 Jellyfin，可以使用：
+如果你不迁移 DNS，又想临时从公网访问本机网页，可以使用：
 
 ```bash
-npm run tunnel:quick:jellyfin
+npm run tunnel:quick:web
 ```
 
 这个命令默认走 `http2`。
@@ -87,16 +44,10 @@ npm run tunnel:quick:jellyfin
 https://xxxxx.trycloudflare.com
 ```
 
-这个地址可以直接访问：
+这个地址可以直接访问首页：
 
 ```text
-https://xxxxx.trycloudflare.com/web/
-```
-
-如果你想让前端项目记录当前这条临时媒体地址，执行：
-
-```bash
-npm run quick-url:set -- https://xxxxx.trycloudflare.com
+https://xxxxx.trycloudflare.com
 ```
 
 注意：
@@ -105,9 +56,15 @@ npm run quick-url:set -- https://xxxxx.trycloudflare.com
 - 终端进程一停，地址就失效
 - 它适合测试和临时访问，不适合正式长期上线
 
-## Tailscale 建议
+## Vercel 说明
 
-- 运行 Jellyfin 的设备安装 Tailscale
-- 观看设备安装 Tailscale
-- 所有设备加入同一 tailnet
-- 前端和 Jellyfin 都只在私有网络里访问
+Vercel 适合部署页面代码，但它无法直接读取你本机
+`/Volumes/2T/zhuyu` 里的视频文件。
+
+如果你要验证真正的本地直出速度，应该：
+
+1. 本地运行 `npm run dev`
+2. 再运行 `npm run tunnel:quick:web`
+3. 通过生成的 `trycloudflare.com` 地址访问
+
+这才是“本地视频 -> 本地 Next.js -> 临时域名”的真实链路。

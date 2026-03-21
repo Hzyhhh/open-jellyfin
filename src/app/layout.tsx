@@ -15,7 +15,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: "Zhuyu Video",
-  description: "Private video library powered by Next.js, Jellyfin, and Tailscale.",
+  description: "Private video library powered by Next.js and direct local streaming.",
 };
 
 export default function RootLayout({

@@ -1,4 +1,4 @@
-export type ContentSource = "local" | "jellyfin";
+export type ContentSource = "local";
 
 export type Episode = {
   id: string;
