@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getSeriesList } from "@/lib/library";
 import { Episode, Series } from "@/lib/types";
 
@@ -18,8 +17,8 @@ export default async function Home() {
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
-          {episodes.map((episode, index) => (
-            <EpisodeCard key={episode.id} episode={episode} index={index} />
+          {episodes.map((episode) => (
+            <EpisodeCard key={episode.id} episode={episode} />
           ))}
         </div>
       )}
@@ -53,10 +52,8 @@ function toNumericSortValue(title: string, episodeNumber?: number) {
 
 function EpisodeCard({
   episode,
-  index,
 }: {
   episode: Episode;
-  index: number;
 }) {
   return (
     <article className="panel overflow-hidden rounded-[1.5rem] p-3 sm:p-4">
@@ -67,27 +64,13 @@ function EpisodeCard({
         src={episode.streamUrl}
       />
 
-      <div className="flex items-start justify-between gap-4 px-1 pt-4">
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.18em] text-muted">
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <span>{episode.source}</span>
-            {episode.durationLabel ? <span>{episode.durationLabel}</span> : null}
-            {episode.seriesTitle !== episode.title ? <span>{episode.seriesTitle}</span> : null}
-          </div>
-          <h2 className="mt-2 truncate text-xl font-semibold text-foreground">
-            {episode.title}
-          </h2>
-          <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted">
-            {episode.description ?? "点击视频即可开始播放。"}
-          </p>
-        </div>
-        <Link
-          href={`/series/${episode.seriesSlug}/${episode.slug}`}
-          className="shrink-0 rounded-full border border-line px-3 py-2 text-sm text-foreground transition-colors hover:bg-surface-strong"
-        >
-          打开
-        </Link>
+      <div className="px-1 pt-4">
+        <h2 className="truncate text-xl font-semibold text-foreground">
+          {episode.title}
+        </h2>
+        <p className="mt-3 line-clamp-2 text-sm leading-6 text-muted">
+          {episode.description ?? "点击视频即可开始播放。"}
+        </p>
       </div>
     </article>
   );
