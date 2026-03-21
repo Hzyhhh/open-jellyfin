@@ -1,0 +1,37 @@
+{
+  "name": "zhuyu-video",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "dev:stack": "sh ./scripts/start-dev-stack.sh",
+    "services:start": "sh ./scripts/start-services.sh",
+    "services:check": "sh ./scripts/check-services.sh",
+    "tunnel:quick:web": "cloudflared tunnel --url http://127.0.0.1:3000",
+    "tunnel:quick:jellyfin": "cloudflared tunnel --url http://127.0.0.1:8096",
+    "quick-url:set": "sh ./scripts/set-quick-tunnel-url.sh",
+    "tunnel:login": "cloudflared tunnel login",
+    "tunnel:create": "sh ./scripts/cloudflared-create.sh",
+    "tunnel:run": "sh ./scripts/cloudflared-run.sh",
+    "tailscale:status": "tailscale --socket=/Users/hzyhhh/.tailscale-userspace/tailscaled.sock status",
+    "tailscale:login": "tailscale --socket=/Users/hzyhhh/.tailscale-userspace/tailscaled.sock up",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "next": "16.2.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

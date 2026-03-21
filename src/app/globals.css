@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f2e8;
+  --foreground: #14281d;
+  --surface: rgba(255, 251, 245, 0.78);
+  --surface-strong: #fffaf2;
+  --muted: #5f6b62;
+  --line: rgba(20, 40, 29, 0.12);
+  --accent: #b64628;
+  --accent-strong: #8e2f17;
+  --hero: #d8e4cf;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-hero: var(--hero);
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-ibm-plex-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background:
+    radial-gradient(circle at top right, rgba(182, 70, 40, 0.18), transparent 26%),
+    radial-gradient(circle at left 20%, rgba(78, 120, 92, 0.15), transparent 22%),
+    linear-gradient(180deg, #f6efdf 0%, #f7f2e8 100%);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-space-grotesk), sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+video {
+  display: block;
+  width: 100%;
+}
+
+.grain {
+  position: relative;
+}
+
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.1;
+  background-image:
+    linear-gradient(rgba(20, 40, 29, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 40, 29, 0.04) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.panel {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+}
+
+.pill {
+  border: 1px solid rgba(20, 40, 29, 0.12);
+  background: rgba(255, 250, 242, 0.9);
+  color: var(--muted);
+}

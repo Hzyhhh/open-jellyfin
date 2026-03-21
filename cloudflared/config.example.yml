@@ -1,0 +1,9 @@
+tunnel: replace-with-your-tunnel-id
+credentials-file: /Users/hzyhhh/.cloudflared/replace-with-your-tunnel-id.json
+
+ingress:
+  - hostname: zhuyu.cion.asia
+    service: http://127.0.0.1:3000
+  - hostname: zhuyuvedio.cion.asia
+    service: http://127.0.0.1:8096
+  - service: http_status:404
