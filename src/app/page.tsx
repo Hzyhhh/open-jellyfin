@@ -57,23 +57,32 @@ function EpisodeCard({
 }: {
   episode: Episode;
 }) {
-  return (
-    <article className="panel overflow-hidden rounded-[1.5rem] p-3 sm:p-4">
-      <video
-        controls
-        preload="metadata"
-        className="aspect-video rounded-[1.2rem] bg-black"
-        src={episode.streamUrl}
-      />
+  const watchHref = `/watch/${episode.rawPath
+    ?.split("/")
+    .map(encodeURIComponent)
+    .join("/")}`;
 
-      <div className="px-1 pt-4">
-        <h2 className="truncate text-xl font-semibold text-foreground">
-          {episode.title}
-        </h2>
-        <p className="mt-3 line-clamp-2 text-sm leading-6 text-muted">
-          {episode.description ?? "点击视频即可开始播放。"}
-        </p>
-      </div>
-    </article>
+  return (
+    <a
+      href={watchHref}
+      className="panel block overflow-hidden rounded-[1.5rem] p-3 transition hover:border-accent hover:bg-surface-strong sm:p-4"
+    >
+      <article>
+        <div className="flex aspect-video items-end rounded-[1.2rem] border border-line bg-[linear-gradient(135deg,rgba(182,70,40,0.18),rgba(20,40,29,0.08))] p-4">
+          <div className="rounded-full border border-white/40 bg-black/60 px-3 py-1 text-xs tracking-[0.2em] text-white uppercase">
+            Play
+          </div>
+        </div>
+
+        <div className="px-1 pt-4">
+          <h2 className="truncate text-xl font-semibold text-foreground">
+            {episode.title}
+          </h2>
+          <p className="mt-3 line-clamp-2 text-sm leading-6 text-muted">
+            {episode.description ?? "点击进入详情页播放。"}
+          </p>
+        </div>
+      </article>
+    </a>
   );
 }

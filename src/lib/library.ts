@@ -26,3 +26,11 @@ export async function getSeriesBySlug(slug: string) {
     return undefined;
   }
 }
+
+export async function getEpisodeByPath(rawPath: string) {
+  const seriesList = await getSeriesList();
+
+  return seriesList
+    .flatMap((series) => series.episodes)
+    .find((episode) => episode.rawPath === rawPath);
+}
