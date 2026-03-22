@@ -19,19 +19,19 @@ export default async function WatchPage({
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-4xl flex-col px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
-      <div className="panel rounded-[2rem] p-4 sm:p-6">
+      <div className="liquid-glass-card overflow-hidden rounded-[2rem] p-4 sm:p-6">
         <Link
           href="/"
-          className="inline-flex items-center rounded-full border border-line px-4 py-2 text-sm text-muted transition hover:border-accent hover:text-foreground"
+          className="interactive-card liquid-glass-button inline-flex items-center rounded-full px-4 py-2 text-sm text-foreground transition duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_28px_rgba(20,40,29,0.12)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_16px_28px_rgba(20,40,29,0.12)] focus-visible:outline-none active:scale-[0.98] active:translate-y-0"
         >
           返回剧集列表
         </Link>
 
-        <div className="mt-5">
+        <div className="liquid-glass-media mt-5 overflow-hidden rounded-[1.6rem] p-0.5">
           <video
             controls
             preload="metadata"
-            className="aspect-video rounded-[1.2rem] bg-black"
+            className="aspect-video rounded-[1.35rem] bg-black"
             src={episode.streamUrl}
           />
         </div>
