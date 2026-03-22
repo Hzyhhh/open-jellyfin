@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getSeriesList } from "@/lib/library";
 import { Episode, Series } from "@/lib/types";
 
@@ -65,19 +66,30 @@ function EpisodeCard({
   return (
     <a
       href={watchHref}
-      className="panel block overflow-hidden rounded-[1.5rem] p-3 transition hover:border-accent hover:bg-surface-strong sm:p-4"
+      className="interactive-card liquid-glass-card block overflow-hidden rounded-[1.75rem] p-3 transition duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_24px_50px_rgba(20,40,29,0.18)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_24px_50px_rgba(20,40,29,0.18)] focus-visible:outline-none active:scale-[0.985] active:translate-y-0 sm:p-4"
+      aria-label={`打开 ${episode.title} 详情页`}
     >
       <article>
-        <div className="flex aspect-video items-end rounded-[1.2rem] border border-line bg-[linear-gradient(135deg,rgba(182,70,40,0.18),rgba(20,40,29,0.08))] p-4">
-          <div className="rounded-full border border-white/40 bg-black/60 px-3 py-1 text-xs tracking-[0.2em] text-white uppercase">
-            Play
-          </div>
+        <div className="liquid-glass-media relative aspect-video overflow-hidden rounded-[1.35rem]">
+          <Image
+            src="/image.png"
+            alt={episode.title}
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover saturate-[1.05]"
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.42),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.14),rgba(255,255,255,0.02)_52%,rgba(20,40,29,0.12))]" />
         </div>
 
         <div className="px-1 pt-4">
-          <h2 className="truncate text-xl font-semibold text-foreground">
-            {episode.title}
-          </h2>
+          <div className="flex items-start justify-between gap-3">
+            <h2 className="truncate text-xl font-semibold text-foreground">
+              {episode.title}
+            </h2>
+            <span className="liquid-glass-pill shrink-0 rounded-full px-3 py-1 text-[11px] tracking-[0.18em] uppercase">
+              点击播放
+            </span>
+          </div>
           <p className="mt-3 line-clamp-2 text-sm leading-6 text-muted">
             {episode.description ?? "点击进入详情页播放。"}
           </p>
